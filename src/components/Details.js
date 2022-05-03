@@ -50,18 +50,17 @@ class Details extends React.Component {
     });
   }
 
+  recuperaDoStorage = () => {
+    const recuperaDados = [JSON.parse(localStorage.getItem('chaveAvalicao'))] || []; // de string para objeto
+    this.setState({
+      recuperaDados,
+    });
+  }
+
   avaliacao = () => {
     const { email, textarea, radio } = this.state;
     const avalia = { email, textarea, radio };
     localStorage.setItem('chaveAvalicao', JSON.stringify(avalia)); // de obj para string
-    this.recuperaDoStorage();
-  }
-
-  recuperaDoStorage = () => {
-    const recuperaDados = JSON.parse(localStorage.getItem('chaveAvalicao')) || []; // de string para objeto
-    this.setState({
-      recuperaDados,
-    });
   }
 
   render() {
@@ -74,8 +73,6 @@ class Details extends React.Component {
       textarea,
       recuperaDados,
     } = this.state;
-
-    const dadosAvaliacao = [recuperaDados];
 
     return (
       <div data-testid="product-detail-name">
@@ -200,7 +197,7 @@ class Details extends React.Component {
           </labe>
         </form>
         <div>
-          {dadosAvaliacao.map((element, index) => (
+          {recuperaDados.map((element, index) => (
             <div key={ index }>
               <p>{ element.email }</p>
               <p>{ element.radio }</p>

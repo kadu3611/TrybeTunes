@@ -7,6 +7,7 @@ class ShoppingCart extends Component {
     this.state = {
       produtosLocalStorage: [],
       quantidadeProdutos: 0,
+      recebeFiltro: [],
 
     };
   }
@@ -15,9 +16,26 @@ class ShoppingCart extends Component {
     this.puxaLocalStorage();
   }
 
-  puxaLocalStorage = () => {
-    const produtos = getFavoriteProduto();
-
+  puxaLocalStorage = async () => {
+    const produtos = await getFavoriteProduto();
+    const palavra = [];
+    /* const filtro = produtos.reduce((acc, elemento) => {
+      if (acc === elemento) {
+        palavra.push([elemento]);
+      }
+      return 'aqui';
+    }); */
+    /* produtosEletronico = produtos.filter(retornaEletronico);
+produtosEletronico.forEach(produtoEletro => {
+    console.log(produtoEletro); */
+    const { recebeFiltro } = this.state;
+    // console.log(produtos.filter((elem, index, self) => index === self.indexOf(elem)));
+  const meuSet = new Set();
+    const objectMap = produtos.reduce((map, object) => {
+      map.set(object.id, object);
+      return map;
+    }, new Map());
+    console.log(objectMap);
     this.setState({
       produtosLocalStorage: produtos,
       quantidadeProdutos: produtos.length,
@@ -61,9 +79,9 @@ class ShoppingCart extends Component {
                 defaultValue="1"
               />
             </div>
-
           ))
         }
+
       </div>
     );
   }

@@ -29,7 +29,7 @@ export const getFavoriteProduto = () /* => new Promise((resolve) */ => {
 export const addProduto = (produto) /* => new Promise((resolve) */ => {
   if (produto) {
     const favoriteProduto = readFavoriteProduto();
-    saveFavoriteProduto([...favoriteProduto, produto]);
+    saveFavoriteProduto([...favoriteProduto, produto]); // faz o spread e adicionna o 'produto'
   }
 };
 

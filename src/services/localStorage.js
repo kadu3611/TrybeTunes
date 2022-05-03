@@ -1,4 +1,5 @@
 const PRODUTOS = 'Produtos';
+const AVALIACAO = 'Avaliacao';
 
 if (!JSON.parse(localStorage.getItem(PRODUTOS))) { // Verificando se existe a key Produtos
   localStorage.setItem(PRODUTOS, JSON.stringify([])); // Cria a key Produtos com o array vazio
@@ -7,6 +8,16 @@ const readFavoriteProduto = () => JSON.parse(localStorage.getItem(PRODUTOS));
 
 const saveFavoriteProduto = (favoriteProduto) => localStorage
   .setItem(PRODUTOS, JSON.stringify(favoriteProduto));
+
+/* ----------------------- */
+
+if (!JSON.parse(localStorage.getItem(AVALIACAO))) { // Verificando se existe a key Produtos
+  localStorage.setItem(AVALIACAO, JSON.stringify([])); // Cria a key Produtos com o array vazio
+}
+const readAvaliacaoProduto = () => JSON.parse(localStorage.getItem(AVALIACAO));
+
+const saveAvaliacaoProduto = (avaliacaoProduto) => localStorage
+  .setItem(AVALIACAO, JSON.stringify(avaliacaoProduto));
 
 // --------------------------------------------------------------------
 // A função simulateRequest simula uma requisição para uma API externa
@@ -34,6 +45,21 @@ export const addProduto = (produto) /* => new Promise((resolve) */ => {
 };
 
 export const removeProduto = (produto) /* => new Promise((resolve) */ => {
-  const favoriteProduto = readFavoriteProduto();
-  saveFavoriteProduto(favoriteProduto.filter((s) => s.trackId !== produto.trackId));
+  saveFavoriteProduto(produto);
+};
+
+/* __ API AVALIAÇÃO __ */
+
+// leitura
+export const getAvaliacaoProduto = () /* => new Promise((resolve) */ => {
+  const avaliacaoProduto = readAvaliacaoProduto();
+  return avaliacaoProduto;
+};
+
+// escrita
+export const addAvaliacao = (avaliacao) /* => new Promise((resolve) */ => {
+  if (avaliacao) {
+    const avaliacaoProduto = readAvaliacaoProduto();
+    saveAvaliacaoProduto([...avaliacaoProduto, avaliacao]);
+  }
 };

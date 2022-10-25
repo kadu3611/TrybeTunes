@@ -56,6 +56,11 @@ class Details extends React.Component {
     addAvaliacao(avalia);
     // localStorage.setItem('chaveAvalicao', JSON.stringify(avalia)); // de obj para string
     this.recuperaDoStorage();
+    this.setState({
+      textarea: '',
+      email: '',
+      radio: '',
+    });
   }
 
   recuperaDoStorage = () => {
@@ -64,12 +69,6 @@ class Details extends React.Component {
     this.setState({
       recuperaDados,
     });
-  }
-
-  avaliacao = () => {
-    const { email, textarea, radio } = this.state;
-    const avalia = { email, textarea, radio };
-    localStorage.setItem('chaveAvalicao', JSON.stringify(avalia)); // de obj para string
   }
 
   render() {
@@ -82,9 +81,7 @@ class Details extends React.Component {
       textarea,
       recuperaDados,
     } = this.state;
-    console.log(recuperaDados);
     // const dadosAvaliacao = [recuperaDados];
-
     return (
       <div data-testid="product-detail-name">
         <Link
@@ -112,14 +109,12 @@ class Details extends React.Component {
             Especificações Técnicas
             {
               attributes.map((element, index) => (
-
                 <li key={ index }>
                   {element.name}
                   :
                   {' '}
                   {element.value_name}
                 </li>
-
               ))
             }
           </ul>
@@ -228,7 +223,6 @@ Details.propTypes = {
 export default Details;
 /* <ul>
                 Especificações técnicas:
-
                 <li>
                   { elemento.name }
                   ,

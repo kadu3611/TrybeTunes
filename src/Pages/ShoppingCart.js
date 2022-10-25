@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { getFavoriteProduto, addProduto, removeProduto } from '../services/localStorage';
+import { getProductsByProduct } from '../services/api';
 
 class ShoppingCart extends Component {
   constructor() {
     super();
     this.state = {
       strgProdutcs: [],
-      // quantidadeProdutos: 0,
-      // productsIds: [],
+      recebendoFiltro: [],
+      recebeQuantidadeStrg: 0,
     };
   }
 
@@ -15,25 +16,21 @@ class ShoppingCart extends Component {
     this.puxaLocalStorage();
   }
 
+  dadosFiltrados = async (recebe) => { // recebe id
+    const { recebendoFiltro } = this.state;
+    recebendoFiltro.push(await getProductsByProduct(recebe));
+    this.setState({
+      recebendoFiltro,
+    });
+  }
+
   puxaLocalStorage = async () => {
     const produtos = await getFavoriteProduto();
-    /* const palavra = []; */
-    /* const filtro = produtos.reduce((acc, elemento) => {
-      if (acc === elemento) {
-        palavra.push([elemento]);
-      }
-      return 'aqui';
-    }); */
-    /* produtosEletronico = produtos.filter(retornaEletronico);
-produtosEletronico.forEach(produtoEletro => {
-    console.log(produtoEletro); */
-    /* const { recebeFiltro } = this.state; */
-    // console.log(produtos.filter((elem, index, self) => index === self.indexOf(elem)));
-    /* const meuSet = new Set();
-    const objectMap = produtos.reduce((map, object) => {
-      map.set(object.id, object);
-      return map;
-    }, new Map()); */
+    // const novaArr = produtos.filter((este, i) => produtos.indexOf(este) === i);
+    // console.log('novo', novaArr);
+    const objectMap = produtos.map((object) => object.id);
+    const idProdutosFiltrados = [...new Set(objectMap)];
+    const produtosUnicos = idProdutosFiltrados.forEach(async (elemento) => this.dadosFiltrados(elemento));
     this.setState({
       strgProdutcs: produtos,
       // quantidadeProdutos: produtos.length,
@@ -55,8 +52,8 @@ produtosEletronico.forEach(produtoEletro => {
 
   decreaseItem = (product) => {
     const { strgProdutcs } = this.state;
-    console.log(product);
-    console.log(strgProdutcs);
+    // console.log(product);
+    // console.log(strgProdutcs);
 
     // procura o index do produto clicado
     const itemPosition = strgProdutcs.indexOf(strgProdutcs.find((element) => (
@@ -77,7 +74,8 @@ produtosEletronico.forEach(produtoEletro => {
   }
 
   render() {
-    const { strgProdutcs } = this.state;
+    const { strgProdutcs, recebendoFiltro, recebeQuantidadeStrg } = this.state;
+    let contador = 0;
 
     const quantidadeCarrinho = (
       <div style={ { display: 'flex', flexDirection: 'row' } }>
@@ -92,30 +90,6 @@ produtosEletronico.forEach(produtoEletro => {
       </div>
     );
 
-    /* // recebe ids dos produtos
-    const newArr = [];
-    strgProdutcs.forEach((element) => {
-      newArr.push(element.id);
-    });
-
-    console.log('newArr', newArr);
-
-    // filtra repetidos
-    const filteredArray = newArr.filter((ele, pos) => newArr.indexOf(ele) === pos);
-    console.log('filteredArray', filteredArray);
-
-    const test3 = [];
-    const test2 = strgProdutcs.filter((e) => {
-      filteredArray.forEach((element) => {
-        if (element === e.id) {
-          console.log('element', e);
-          test3.push(e);
-        }
-      });
-    });
-    console.log('Test', test2);
-    console.log('test3', test3); */
-
     return (
       <div>
         {
@@ -124,7 +98,7 @@ produtosEletronico.forEach(produtoEletro => {
             : quantidadeCarrinho
         }
         {
-          strgProdutcs.map((product, index) => (
+          recebendoFiltro.map((product, index) => (
             <div
               key={ index }
               style={ { display: 'block' } }
@@ -150,9 +124,15 @@ produtosEletronico.forEach(produtoEletro => {
               >
                 Sub
               </button>
+              {
+                strgProdutcs.forEach((elemento) => {
+                  if (elemento.id === product.id) {
 
-              <p>{this.qntItens(product)}</p>
-
+                    contador = elemento;
+                  }
+                })
+              }
+              <p>{this.qntItens(contador)}</p>
               {/* <input
                 type="number"
                 defaultValue="1"

@@ -9,7 +9,7 @@ const readFavoriteProduto = () => JSON.parse(localStorage.getItem(PRODUTOS));
 const saveFavoriteProduto = (favoriteProduto) => localStorage
   .setItem(PRODUTOS, JSON.stringify(favoriteProduto));
 
-/* ----------------------- */
+/* -------------------------------------------------------------------------------------- */
 
 if (!JSON.parse(localStorage.getItem(AVALIACAO))) { // Verificando se existe a key Produtos
   localStorage.setItem(AVALIACAO, JSON.stringify([])); // Cria a key Produtos com o array vazio
